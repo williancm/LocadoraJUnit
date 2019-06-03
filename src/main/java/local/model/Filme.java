@@ -1,7 +1,6 @@
 package local.model;
 
 import local.exception.FilmeException;
-import local.exception.FilmeSemEstoqueException;
 
 public class Filme {
 
@@ -27,12 +26,6 @@ public class Filme {
         if (nome.length() < 2 || nome.length() > 99){
             throw new FilmeException("O nome do filme deve possuir entre 2 e 99 caracteres");
         }
-        if(estoque < 0 || estoque > 99){
-            throw new FilmeException("Valor de estoque inválido");
-        }
-        if(precoLocacao < 1.0 || precoLocacao > 9.99){
-            throw new FilmeException("Valor locação inválido");
-        }
 
 
         this.nome = nome;
@@ -43,6 +36,10 @@ public class Filme {
     }
 
     public void setEstoque(Integer estoque) {
+
+        if(estoque < 0 || estoque > 99){
+            throw new FilmeException("Valor de estoque inválido");
+        }
         this.estoque = estoque;
     }
 
@@ -51,6 +48,10 @@ public class Filme {
     }
 
     public void setPrecoLocacao(Double precoLocacao) {
+
+        if(precoLocacao < 1.0 || precoLocacao > 9.99){
+            throw new FilmeException("Valor locação inválido");
+        }
         this.precoLocacao = precoLocacao;
     }
 }

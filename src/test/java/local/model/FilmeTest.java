@@ -38,7 +38,7 @@ public class FilmeTest {
     public void nomeFilme99Caracteres(){
         Filme filme = new Filme();
         filme.setNome("Rambooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
-        assertThat(filme, is(equalTo(filme)));
+        assertThat(filme.getNome(), is(equalTo("Rambooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo")));
     }
 
     @Test

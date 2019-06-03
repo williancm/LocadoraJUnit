@@ -31,7 +31,7 @@ public class Filme {
             throw new FilmeException("Valor de estoque inválido");
         }
         if(precoLocacao < 1.0 || precoLocacao > 9.99){
-            throw new FilmeException("Valor de locação inválido");
+            throw new FilmeException("Valor locação inválido");
         }
 
 

@@ -33,7 +33,7 @@ public class Cliente {
 			throw new ClienteException("Números e símbolos não são permitidos");
 		}
 		if(!nome.contains(" ")){
-			throw new ClienteException("É necessário adicionar um sobrenome (ex.: Angelo Luz)");
+			throw new ClienteException("necessário adicionar um sobrenome (ex.: Angelo Luz)");
 		}
 
 		//ignorando espaços no início e final do nome

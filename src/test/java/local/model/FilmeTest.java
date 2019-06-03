@@ -76,4 +76,31 @@ public class FilmeTest {
         assertThat(ex.getMessage(), is(equalTo("Valor de estoque inválido")));
     }
 
+    @Test
+    public void precoLocacao1() {
+        Filme filme = new Filme();
+        filme.setPrecoLocacao(1.0);
+        assertThat(filme, is(equalTo(filme)));
+    }
+
+    @Test
+    public void precoLocacao099() {
+        Filme filme = new Filme();
+        Exception ex = assertThrows(FilmeException.class, () ->filme.setPrecoLocacao(0.99));
+        assertThat(ex.getMessage(), is(equalTo("Valor locação inválido")));
+    }
+
+    @Test
+    public void precoLocacao999() {
+        Filme filme = new Filme();
+        filme.setPrecoLocacao(9.99);
+        assertThat(filme, is(equalTo(filme)));
+    }
+
+    @Test
+    public void precoLocacao10() {
+        Filme filme = new Filme();
+        Exception ex = assertThrows(FilmeException.class, () ->filme.setPrecoLocacao(10.0));
+        assertThat(ex.getMessage(), is(equalTo("Valor locação inválido")));
+    }
 }

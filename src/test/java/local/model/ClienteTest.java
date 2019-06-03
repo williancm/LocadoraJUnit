@@ -2,11 +2,14 @@ package local.model;
 
 import local.exception.ClienteException;
 import org.assertj.core.internal.bytebuddy.utility.RandomString;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ClienteTest {
 
@@ -24,6 +27,11 @@ public class ClienteTest {
     //TODO: Nomes não devem possuir símbolos ou números.
     // Lança ClienteException - Números e símbolos não são permitidos
 
-
+    @Test
+    public void nomeNaoDeveSerNulo() {
+        Cliente cliente = new Cliente();
+        Exception ex = assertThrows(ClienteException.class, () ->cliente.setNome(null));
+        assertThat(ex.getMessage(), Is.is(CoreMatchers.equalTo("Nome é um campo obrigatório")));
+    }
 
 }

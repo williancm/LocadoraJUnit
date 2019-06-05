@@ -31,7 +31,7 @@ public class FilmeTest {
     public void nomeFilme2Caracteres() {
         Filme filme = new Filme();
         filme.setNome("Ra");
-        assertThat(filme, is(equalTo(filme)));
+        assertThat(filme.getNome(), is(equalTo("Ra")));
     }
 
     @Test
@@ -59,14 +59,14 @@ public class FilmeTest {
     public void estoquePositivo() {
         Filme filme = new Filme();
         filme.setEstoque(0);
-        assertThat(filme, is(equalTo(filme)));
+        assertThat(filme.getEstoque(), is(equalTo(0)));
     }
 
     @Test
     public void estoque99() {
         Filme filme = new Filme();
         filme.setEstoque(99);
-        assertThat(filme, is(equalTo(filme)));
+        assertThat(filme.getEstoque(), is(equalTo(99)));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class FilmeTest {
     public void precoLocacao1() {
         Filme filme = new Filme();
         filme.setPrecoLocacao(1.0);
-        assertThat(filme, is(equalTo(filme)));
+        assertThat(filme.getPrecoLocacao(), is(equalTo(1.0)));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class FilmeTest {
     public void precoLocacao999() {
         Filme filme = new Filme();
         filme.setPrecoLocacao(9.99);
-        assertThat(filme, is(equalTo(filme)));
+        assertThat(filme.getPrecoLocacao(), is(equalTo(9.99)));
     }
 
     @Test

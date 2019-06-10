@@ -21,6 +21,9 @@ public class LocacaoService {
         if (filmes == null || filmes.isEmpty()) {
             throw new LocadoraException("Nenhum filme foi selecionado");
         }
+        if(filmes.size() == 3){
+            filmes.get(2).setPrecoLocacao(filmes.get(2).getPrecoLocacao()*0.75);
+        }
 
         Locacao locacao = new Locacao();
         locacao.setCliente(cliente);

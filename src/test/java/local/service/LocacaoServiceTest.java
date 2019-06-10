@@ -28,6 +28,7 @@ public class LocacaoServiceTest {
     private List<Filme> filmes;
     private Cliente cliente;
     public static Double VALOR_FILME = 4.00;
+    private LocacaoService locacaoService;
 
     @BeforeEach
     public void setUp(){
@@ -97,5 +98,21 @@ public class LocacaoServiceTest {
         assertTrue(DataUtils.isMesmaData(data,DataUtils.obterDataComDiferencaDias(1)));
 
     }
+
+    @Test
+    public void devePagar75PorcentoNoFilme3() throws
+            FilmeSemEstoqueException, LocadoraException{
+        //Cenário
+        Cliente usuario = new Cliente("Angelo");
+        List<Filme> filmes = Arrays.asList(
+                new Filme("Piratas do Vale do Silício", 4, 4.0),
+                new Filme("Jobs", 3, 4.0),
+                new Filme("Duro de Matar 4", 11, 4.0));
+        //Ação
+        Locacao locacao = locacaoService.alugarFilme(usuario, filmes);
+        //Validação
+        assertThat(locacao.getValor(), is(11));
+    }
+
 
 }

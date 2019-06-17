@@ -1,5 +1,9 @@
 package local.model;
 
+import local.exception.LocadoraException;
+import local.util.DataUtils;
+import org.thymeleaf.util.DateUtils;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +35,10 @@ public class Locacao {
 	public Date getDataRetorno() {
 		return dataRetorno;
 	}
-	public void setDataRetorno(Date dataRetorno) {
+	public void setDataRetorno(Date dataRetorno) throws LocadoraException {
+		if(DataUtils.isDomingo(dataRetorno, 1)){
+			throw new LocadoraException("Não é possível devolver um filme no domingo");
+		}
 		this.dataRetorno = dataRetorno;
 	}
 	public Double getValor() {

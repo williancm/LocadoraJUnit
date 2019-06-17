@@ -2,6 +2,7 @@ package local.service;
 
 import static local.util.DataUtils.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -22,13 +23,12 @@ public class LocacaoService {
             throw new LocadoraException("Nenhum filme foi selecionado");
         }
 
-
         Locacao locacao = new Locacao();
         locacao.setCliente(cliente);
         locacao.setDataLocacao(new Date());
 
         //Entrega no dia seguinte
-        Date dataEntrega = new Date();
+        Date dataEntrega = locacao.getDataLocacao();
         dataEntrega = adicionarDias(dataEntrega, 1);
         int diaSemana = 1;
         if(DataUtils.isDomingo(dataEntrega, diaSemana)){
@@ -44,7 +44,6 @@ public class LocacaoService {
             filmes.get(3).setPrecoLocacao(filmes.get(3).getPrecoLocacao() * 0.5);
         }
         int count = 0;
-        double vlr = 0.0;
         locacao.setValor(0.0);
         for(Filme filme: filmes) {
             if (filme.getEstoque() == 0) {
@@ -53,14 +52,13 @@ public class LocacaoService {
 
             locacao.addFilme(filme);
 
-            vlr = locacao.getValor() + filme.getPrecoLocacao();
+            locacao.setValor(locacao.getValor() + filme.getPrecoLocacao());
             if(filmes.size() == 5 && count  == 4){
-                vlr = locacao.getValor() + filme.getPrecoLocacao();
+                locacao.setValor(locacao.getValor() - filme.getPrecoLocacao());
             }
             count++;
 
         }
-        locacao.setValor(vlr);
 
         return locacao;
     }

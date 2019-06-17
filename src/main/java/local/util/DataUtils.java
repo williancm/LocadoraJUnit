@@ -89,6 +89,6 @@ public class DataUtils {
     public static boolean isDomingo(Date data1, int diaSemana) {
         Calendar calendar1 = Calendar.getInstance();
         calendar1.setTime(data1);
-        return (calendar1.get(DAY_OF_MONTH) == diaSemana);
+        return (calendar1.get(DAY_OF_WEEK) == diaSemana);
     }
 }

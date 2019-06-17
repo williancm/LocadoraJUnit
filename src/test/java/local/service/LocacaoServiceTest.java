@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static local.util.DataUtils.adicionarDias;
 import static org.assertj.core.api.Assertions.fail;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -27,7 +28,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-//TODO atualizar testes para trabalhar com os multiplos filmes
 public class LocacaoServiceTest {
 
     private List<Filme> filmes;
@@ -84,13 +84,11 @@ public class LocacaoServiceTest {
         LocacaoService ls = new LocacaoService();
         //Ação
         Locacao locacao = ls.alugarFilme(cliente, Arrays.asList(filmes.get(0), filmes.get(1)));
-        //Validação
-        //assertThat(locacao.getValor(), is(4.0));
+
     }
 
     @Test
     public void verificaDataEntrega() throws LocadoraException {
-        //TODO: Deve entregar o filme sempre no dia posterior a retirada
         LocacaoService ls = new LocacaoService();
 
         Locacao locacao = ls.alugarFilme(cliente, Arrays.asList(filmes.get(0), filmes.get(1)));
@@ -108,25 +106,24 @@ public class LocacaoServiceTest {
 
         Locacao locacao = ls.alugarFilme(cliente, Arrays.asList(filmes.get(0), filmes.get(1)));
 
-        Date data = locacao.getDataRetorno();
+        Date dataEntrega = new Date("06/23/2019");
+        locacao.setDataRetorno(dataEntrega);
 
-        Exception ex = assertThrows(LocadoraException.class, () ->locacao.setDataRetorno(data));
-        assertThat(ex.getMessage(), Is.is(equalTo("O nome do filme deve possuir entre 2 e 99 caracteres")));
+        //Validação
+        assertThat(locacao.getDataRetorno(), is(adicionarDias(dataEntrega, 1)));
     }
 
 
     @Test
-    public void naoDeveEntregueNoDomingo() throws LocadoraException {
-        //TODO: Não Deve entregar filme no Domingo, adiar entrega para segunda
+    public void naoDeveEntregarNoDomingo() throws LocadoraException {
         LocacaoService ls = new LocacaoService();
 
         Locacao locacao = ls.alugarFilme(cliente, Arrays.asList(filmes.get(0), filmes.get(1)));
 
-        Date data = locacao.getDataRetorno();
-
-
-        Exception ex = assertThrows(LocadoraException.class, () ->locacao.setDataRetorno(data));
-        assertThat(ex.getMessage(), Is.is(equalTo("O nome do filme deve possuir entre 2 e 99 caracteres")));
+        Date dataEntrega = new Date("06/23/2019");
+        //Validação
+        Exception ex = assertThrows(LocadoraException.class, () ->locacao.setDataRetorno(dataEntrega));
+        assertThat(ex.getMessage(), Matchers.is(Matchers.equalTo("Não é possível devolver um filme no domingo")));
     }
 
     @Test

@@ -1,5 +1,7 @@
 package local.service;
 
+import local.exception.ClienteException;
+import local.exception.FilmeException;
 import local.exception.FilmeSemEstoqueException;
 import local.exception.LocadoraException;
 import local.model.Filme;
@@ -7,6 +9,8 @@ import local.model.Cliente;
 import local.model.Locacao;
 import local.util.DataUtils;
 
+import org.hamcrest.Matchers;
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +33,7 @@ public class LocacaoServiceTest {
     private Cliente cliente;
     public static Double VALOR_FILME = 4.00;
     private LocacaoService locacaoService;
-/*
+
     @BeforeEach
     public void setUp(){
         cliente = new Cliente("Angelo Gonçalves da Luz");
@@ -46,7 +50,7 @@ public class LocacaoServiceTest {
                 new Filme("A Lista de Schindler", 5, VALOR_FILME),
                 new Filme("Guerra nas Estrelas", 9, VALOR_FILME)
         );
-    }*/
+    }
 
 
     @Test
@@ -58,7 +62,7 @@ public class LocacaoServiceTest {
         //Processamento e validação
         try {
             //TODO: Corrigir parâmetro para teste
-            ls.alugarFilme(cliente, null);
+            ls.alugarFilme(cliente, Arrays.asList(filmes.get(0), filmes.get(1)));
             fail("Locação realizada com usuário null");
         }catch (LocadoraException | FilmeSemEstoqueException ex){
             //assertEquals("Impossível locar sem um usuário",ex.getMessage());
@@ -68,17 +72,6 @@ public class LocacaoServiceTest {
     @Test
     public void deveValidarValorLocacao() throws FilmeSemEstoqueException, LocadoraException {
         //TODO: Reescrever teste
-        //Cenário
-        Cliente cliente = new Cliente("Willian");
-        LocacaoService ls = new LocacaoService();
-        List<Filme> filmes = Arrays.asList(
-                new Filme("Piratas do Vale do Silício", 4, 4.0));
-
-        //Ação
-        Locacao locacao = ls.alugarFilme(cliente, filmes);
-        //Validação
-        assertThat(locacao.getValor(), is(4.0));
-
 
     }
 
@@ -88,13 +81,10 @@ public class LocacaoServiceTest {
         //Cenário
         Cliente cliente = new Cliente("Willian");
         LocacaoService ls = new LocacaoService();
-        List<Filme> filmes = Arrays.asList(
-                new Filme("Piratas do Vale do Silício", 4, 4.0));
-
         //Ação
-        Locacao locacao = ls.alugarFilme(cliente, filmes);
+        Locacao locacao = ls.alugarFilme(cliente, Arrays.asList(filmes.get(0), filmes.get(1)));
         //Validação
-        assertThat(locacao.getValor(), is(4.0));
+        //assertThat(locacao.getValor(), is(4.0));
     }
 
     @Test
@@ -102,12 +92,40 @@ public class LocacaoServiceTest {
         //TODO: Deve entregar o filme sempre no dia posterior a retirada
         LocacaoService ls = new LocacaoService();
 
-        Locacao locacao = ls.alugarFilme(cliente,Arrays.asList(filmes.get(0),filmes.get(1)));
+        Locacao locacao = ls.alugarFilme(cliente, Arrays.asList(filmes.get(0), filmes.get(1)));
 
         Date data = locacao.getDataRetorno();
 
-        assertTrue(DataUtils.isMesmaData(data,DataUtils.obterDataComDiferencaDias(1)));
+        assertTrue(DataUtils.isMesmaData(data, DataUtils.obterDataComDiferencaDias(1)));
 
+    }
+
+    @Test
+    public void DeveAdiarEntregaDeDomingoParaSegunda() throws LocadoraException {
+        //TODO: Não Deve entregar filme no Domingo, adiar entrega para segunda
+        LocacaoService ls = new LocacaoService();
+
+        Locacao locacao = ls.alugarFilme(cliente, Arrays.asList(filmes.get(0), filmes.get(1)));
+
+        Date data = locacao.getDataRetorno();
+
+        Exception ex = assertThrows(LocadoraException.class, () ->locacao.setDataRetorno(data));
+        assertThat(ex.getMessage(), Is.is(equalTo("O nome do filme deve possuir entre 2 e 99 caracteres")));
+    }
+
+
+    @Test
+    public void naoDeveEntregueNoDomingo() throws LocadoraException {
+        //TODO: Não Deve entregar filme no Domingo, adiar entrega para segunda
+        LocacaoService ls = new LocacaoService();
+
+        Locacao locacao = ls.alugarFilme(cliente, Arrays.asList(filmes.get(0), filmes.get(1)));
+
+        Date data = locacao.getDataRetorno();
+
+
+        Exception ex = assertThrows(LocadoraException.class, () ->locacao.setDataRetorno(data));
+        assertThat(ex.getMessage(), Is.is(equalTo("O nome do filme deve possuir entre 2 e 99 caracteres")));
     }
 
     @Test
@@ -116,12 +134,9 @@ public class LocacaoServiceTest {
         //Cenário
         Cliente usuario = new Cliente("Angelo");
         LocacaoService ls = new LocacaoService();
-        List<Filme> filmes = Arrays.asList(
-                new Filme("Piratas do Vale do Silício", 4, 4.0),
-                new Filme("Jobs", 3, 4.0),
-                new Filme("Duro de Matar 4", 11, 4.0));
+
         //Ação
-        Locacao locacao = ls.alugarFilme(usuario, filmes);
+        Locacao locacao = ls.alugarFilme(usuario, Arrays.asList(filmes.get(0), filmes.get(1), filmes.get(2)));
         //Validação
         assertThat(locacao.getValor(), is(11.0));
     }
@@ -132,31 +147,23 @@ public class LocacaoServiceTest {
         //Cenário
         Cliente usuario = new Cliente("Angelo");
         LocacaoService ls = new LocacaoService();
-        List<Filme> filmes = Arrays.asList(
-                new Filme("Piratas do Vale do Silício", 4, 4.0),
-                new Filme("Jobs", 3, 4.0),
-                new Filme("Duro de Matar 4", 11, 4.0),
-                new Filme("Star Wars", 14, 4.0));
         //Ação
-        Locacao locacao = ls.alugarFilme(usuario, filmes);
+        Locacao locacao = ls.alugarFilme(usuario, Arrays.asList(filmes.get(0), filmes.get(1),
+                                                                filmes.get(2), filmes.get(3)));
         //Validação
         assertThat(locacao.getValor(), is(13.0));
     }
 
     @Test
-    public void naoDevePagarOFilme5() throws
+    public void naoDevePagarPeloFilme5() throws
             FilmeSemEstoqueException, LocadoraException{
         //Cenário
         Cliente usuario = new Cliente("Angelo");
         LocacaoService ls = new LocacaoService();
-        List<Filme> filmes = Arrays.asList(
-                new Filme("Piratas do Vale do Silício", 4, 4.0),
-                new Filme("Jobs", 3, 4.0),
-                new Filme("Duro de Matar 4", 11, 4.0),
-                new Filme("Shrek", 11, 4.0),
-                new Filme("Star Wars", 14, 4.0));
         //Ação
-        Locacao locacao = ls.alugarFilme(usuario, filmes);
+        Locacao locacao = ls.alugarFilme(usuario, Arrays.asList(filmes.get(0), filmes.get(1),
+                                                                filmes.get(2), filmes.get(3),
+                                                                                filmes.get(4)));
         //Validação
         assertThat(locacao.getValor(), is(13.0));
     }

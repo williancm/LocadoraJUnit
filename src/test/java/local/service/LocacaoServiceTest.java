@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -135,8 +136,10 @@ public class LocacaoServiceTest {
         Cliente usuario = new Cliente("Angelo");
         LocacaoService ls = new LocacaoService();
 
+
         //Ação
-        Locacao locacao = ls.alugarFilme(usuario, Arrays.asList(filmes.get(0), filmes.get(1), filmes.get(2)));
+        Locacao locacao = ls.alugarFilme(usuario, Arrays.asList(filmes.get(0), filmes.get(1),
+                                                                    filmes.get(2)));
         //Validação
         assertThat(locacao.getValor(), is(11.0));
     }

@@ -44,7 +44,8 @@ public class LocacaoService {
             filmes.get(3).setPrecoLocacao(filmes.get(3).getPrecoLocacao() * 0.5);
         }
         int count = 0;
-        double vlr = 0;
+        double vlr = 0.0;
+        locacao.setValor(0.0);
         for(Filme filme: filmes) {
             if (filme.getEstoque() == 0) {
                 throw new FilmeSemEstoqueException("Filme sem estoque");
